@@ -3,8 +3,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import Group
 from django.views.decorators.http import require_POST
 
-from .models import Incidencia, Tecnico
+from .models import Incidencia, Tecnico, HistorialEstadoIncidencia
 from .forms import IncidenciaForm
+
 
 
 @login_required
@@ -81,12 +82,13 @@ def autoasignar_incidencia(request, incidencia_id):
 def cambiar_estado_incidencia(request, incidencia_id):
     user = request.user
 
+    # Solo técnicos
     if not user.groups.filter(name='Técnicos').exists():
         return redirect('home')
 
     try:
         tecnico = user.tecnico
-    except:
+    except Tecnico.DoesNotExist:
         return redirect('home')
 
     incidencia = get_object_or_404(
@@ -99,11 +101,19 @@ def cambiar_estado_incidencia(request, incidencia_id):
 
     estados_validos = ['pendiente', 'en_espera', 'resuelto', 'cerrado']
 
-    if nuevo_estado in estados_validos:
+    if nuevo_estado in estados_validos and nuevo_estado != incidencia.estado:
+        HistorialEstadoIncidencia.objects.create(
+            incidencia=incidencia,
+            estado_anterior=incidencia.estado,
+            estado_nuevo=nuevo_estado,
+            cambiado_por=user
+        )
+
         incidencia.estado = nuevo_estado
         incidencia.save()
 
     return redirect('home')
+
 
 @login_required
 def crear_incidencia(request):
@@ -130,23 +140,36 @@ def detalle_incidencia(request, incidencia_id):
     user = request.user
     incidencia = get_object_or_404(Incidencia, id=incidencia_id)
 
-    # Admin ve todo
-    if user.is_superuser:
-        pass
+    es_admin = user.is_superuser
+    es_usuario_creador = incidencia.usuario_creador == user
+    es_tecnico = user.groups.filter(name='Técnicos').exists()
+    es_tecnico_asignado = False
+    puede_autoasignar = False
 
-    # Usuario creador
-    elif incidencia.usuario_creador == user:
-        pass
+    if es_tecnico and hasattr(user, 'tecnico'):
+        tecnico = user.tecnico
+        es_tecnico_asignado = incidencia.tecnico_asignado == tecnico
+        puede_autoasignar = (
+            incidencia.tecnico_asignado is None and
+            incidencia.tipo_incidencia == tecnico.especialidad
+        )
 
-    # Técnico asignado
-    elif hasattr(user, 'tecnico') and incidencia.tecnico_asignado == user.tecnico:
-        pass
-
-    else:
+    # Control de acceso
+    if not (es_admin or es_usuario_creador or es_tecnico_asignado):
         return redirect('home')
+
+    historial = incidencia.historial_estados.order_by('-fecha_cambio')
+
+    context = {
+        'incidencia': incidencia,
+        'historial': historial,
+        'es_tecnico': es_tecnico,
+        'es_tecnico_asignado': es_tecnico_asignado,
+        'puede_autoasignar': puede_autoasignar,
+    }
 
     return render(
         request,
         'incidencias/detalle_incidencia.html',
-        {'incidencia': incidencia}
+        context
     )

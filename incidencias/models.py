@@ -81,3 +81,28 @@ class Incidencia(models.Model):
 
     def __str__(self):
         return f"[{self.estado}] {self.titulo}"
+
+class HistorialEstadoIncidencia(models.Model):
+    incidencia = models.ForeignKey(
+        Incidencia,
+        on_delete=models.CASCADE,
+        related_name='historial_estados'
+    )
+
+    estado_anterior = models.CharField(max_length=20)
+    estado_nuevo = models.CharField(max_length=20)
+
+    cambiado_por = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+
+    fecha_cambio = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return (
+            f"Incidencia {self.incidencia.id}: "
+            f"{self.estado_anterior} → {self.estado_nuevo}"
+        )
