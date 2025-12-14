@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Incidencia {{ incidencia.id }} | Incidex{% endblock %}
+
+{% block content %}
+<h2>{{ incidencia.titulo }}</h2>
+
+<p><strong>Descripción:</strong></p>
+<p>{{ incidencia.descripcion }}</p>
+
+<ul>
+    <li><strong>Estado:</strong> {{ incidencia.estado }}</li>
+    <li><strong>Criticidad:</strong> {{ incidencia.criticidad }}</li>
+    <li><strong>Tipo:</strong> {{ incidencia.tipo_incidencia }}</li>
+    <li><strong>Fecha de creación:</strong> {{ incidencia.fecha_creacion }}</li>
+    <li><strong>Usuario creador:</strong> {{ incidencia.usuario_creador.username }}</li>
+    <li>
+        <strong>Técnico asignado:</strong>
+        {% if incidencia.tecnico_asignado %}
+            {{ incidencia.tecnico_asignado.usuario.username }}
+        {% else %}
+            Sin asignar
+        {% endif %}
+    </li>
+</ul>
+
+<a href="{% url 'home' %}">Volver</a>
+{% endblock %}

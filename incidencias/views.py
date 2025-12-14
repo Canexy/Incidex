@@ -124,3 +124,29 @@ def crear_incidencia(request):
         form = IncidenciaForm()
 
     return render(request, 'incidencias/crear_incidencia.html', {'form': form})
+
+@login_required
+def detalle_incidencia(request, incidencia_id):
+    user = request.user
+    incidencia = get_object_or_404(Incidencia, id=incidencia_id)
+
+    # Admin ve todo
+    if user.is_superuser:
+        pass
+
+    # Usuario creador
+    elif incidencia.usuario_creador == user:
+        pass
+
+    # Técnico asignado
+    elif hasattr(user, 'tecnico') and incidencia.tecnico_asignado == user.tecnico:
+        pass
+
+    else:
+        return redirect('home')
+
+    return render(
+        request,
+        'incidencias/detalle_incidencia.html',
+        {'incidencia': incidencia}
+    )

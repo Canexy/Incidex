@@ -15,7 +15,10 @@
         <ul>
         {% for inc in incidencias %}
             <li>
-                {{ inc.titulo }} – {{ inc.estado }} ({{ inc.criticidad }})
+                <a href="{% url 'detalle_incidencia' inc.id %}">
+                    {{ inc.titulo }}
+                </a>
+                – {{ inc.estado }} ({{ inc.criticidad }})
             </li>
         {% endfor %}
         </ul>
@@ -30,9 +33,14 @@
         <ul>
         {% for inc in incidencias_disponibles %}
             <li>
-                {{ inc.titulo }} – {{ inc.criticidad }}
+                <a href="{% url 'detalle_incidencia' inc.id %}">
+                    {{ inc.titulo }}
+                </a>
+                – {{ inc.criticidad }}
 
-                <form method="post" action="{% url 'autoasignar_incidencia' inc.id %}" style="display:inline;">
+                <form method="post"
+                      action="{% url 'autoasignar_incidencia' inc.id %}"
+                      style="display:inline;">
                     {% csrf_token %}
                     <button type="submit">Asignarme</button>
                 </form>
@@ -49,9 +57,15 @@
         <ul>
         {% for inc in incidencias_asignadas %}
             <li>
-                <strong>{{ inc.titulo }}</strong> – Estado actual: {{ inc.estado }}
+                <strong>
+                    <a href="{% url 'detalle_incidencia' inc.id %}">
+                        {{ inc.titulo }}
+                    </a>
+                </strong>
+                – Estado actual: {{ inc.estado }}
 
-                <form method="post" action="{% url 'cambiar_estado_incidencia' inc.id %}">
+                <form method="post"
+                      action="{% url 'cambiar_estado_incidencia' inc.id %}">
                     {% csrf_token %}
                     <select name="estado">
                         <option value="">-- Cambiar estado --</option>
@@ -75,7 +89,10 @@
     <ul>
     {% for inc in incidencias %}
         <li>
-            {{ inc.titulo }} – {{ inc.estado }} – {{ inc.tipo_incidencia }}
+            <a href="{% url 'detalle_incidencia' inc.id %}">
+                {{ inc.titulo }}
+            </a>
+            – {{ inc.estado }} – {{ inc.tipo_incidencia }}
         </li>
     {% endfor %}
     </ul>
