@@ -3,10 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Incidex</title>
+    <title>{% block title %}Incidex{% endblock %}</title>
 </head>
 <body>
-    {% block content %}
-    {% endblock %}
+    <header>
+        <h1>Incidex</h1>
+        {% if user.is_authenticated %}
+            <p>Sesión iniciada como: {{ user.username }}</p>
+            <form method="post" action="{% url 'logout' %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit">Cerrar sesión</button>
+        </form>
+        {% endif %}
+    </header>
+    <hr>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
 </body>
 </html>
