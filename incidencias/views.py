@@ -74,3 +74,32 @@ def autoasignar_incidencia(request, incidencia_id):
     incidencia.save()
 
     return redirect('home')
+
+@login_required
+@require_POST
+def cambiar_estado_incidencia(request, incidencia_id):
+    user = request.user
+
+    if not user.groups.filter(name='Técnicos').exists():
+        return redirect('home')
+
+    try:
+        tecnico = user.tecnico
+    except:
+        return redirect('home')
+
+    incidencia = get_object_or_404(
+        Incidencia,
+        id=incidencia_id,
+        tecnico_asignado=tecnico
+    )
+
+    nuevo_estado = request.POST.get('estado')
+
+    estados_validos = ['pendiente', 'en_espera', 'resuelto', 'cerrado']
+
+    if nuevo_estado in estados_validos:
+        incidencia.estado = nuevo_estado
+        incidencia.save()
+
+    return redirect('home')
