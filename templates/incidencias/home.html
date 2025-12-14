@@ -29,6 +29,11 @@
         {% for inc in incidencias_disponibles %}
             <li>
                 {{ inc.titulo }} – {{ inc.criticidad }}
+
+                <form method="post" action="{% url 'autoasignar_incidencia' inc.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit">Asignarme</button>
+                </form>
             </li>
         {% endfor %}
         </ul>

@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import Group
+from django.views.decorators.http import require_POST
 
 from .models import Incidencia, Tecnico
 
@@ -46,3 +47,30 @@ def home(request):
         context['incidencias'] = incidencias
 
     return render(request, "incidencias/home.html", context)
+
+@login_required
+@require_POST
+def autoasignar_incidencia(request, incidencia_id):
+    user = request.user
+
+    # Solo técnicos
+    if not user.groups.filter(name='Técnicos').exists():
+        return redirect('home')
+
+    try:
+        tecnico = user.tecnico
+    except:
+        return redirect('home')
+
+    incidencia = get_object_or_404(
+        Incidencia,
+        id=incidencia_id,
+        tecnico_asignado__isnull=True,
+        tipo_incidencia=tecnico.especialidad
+    )
+
+    incidencia.tecnico_asignado = tecnico
+    incidencia.estado = 'abierto'
+    incidencia.save()
+
+    return redirect('home')
