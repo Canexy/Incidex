@@ -1,23 +1,28 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Incidex{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-    <header>
-        <h1>Incidex</h1>
-        {% if user.is_authenticated %}
-            <p>Sesión iniciada como: {{ user.username }}</p>
-            <form method="post" action="{% url 'logout' %}" style="display:inline;">
-            {% csrf_token %}
-            <button type="submit">Cerrar sesión</button>
-        </form>
-        {% endif %}
+    <header class="topbar">
+        <div class="topbar-left">
+            <span class="logo">Incidex</span>
+        </div>
+        <div class="topbar-right">
+            {% if user.is_authenticated %}
+                <span class="user-info">{{ user.username }}</span>
+                <form method="post" action="{% url 'logout' %}" class="logout-form">
+                    {% csrf_token %}
+                    <button type="submit">Salir</button>
+                </form>
+            {% endif %}
+        </div>
     </header>
-    <hr>
-    <main>
+    <main class="container">
         {% block content %}
         {% endblock %}
     </main>

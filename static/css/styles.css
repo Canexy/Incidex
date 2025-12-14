@@ -1,0 +1,119 @@
+/* Reset mínimo */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Base */
+body {
+    font-family: Consolas, Monaco, "Courier New", monospace;
+    background-color: #14161b;       /* más claro que antes */
+    color: #d6d9df;                  /* menos blanco puro */
+    line-height: 1.6;
+}
+
+/* Header */
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1b1e25;
+    padding: 12px 20px;
+    border-bottom: 1px solid #2b2f3a;
+}
+
+.logo {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #6aa6ff;                  /* azul más suave */
+}
+
+.user-info {
+    margin-right: 15px;
+    color: #aab2c0;
+}
+
+.logout-form button {
+    background-color: #1b1e25;
+    border: 1px solid #3a3f4b;
+    color: #d6d9df;
+    padding: 6px 10px;
+    cursor: pointer;
+}
+
+.logout-form button:hover {
+    background-color: #2a2f3a;
+}
+
+/* Layout */
+.container {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+/* Títulos */
+h2, h3 {
+    margin-bottom: 15px;
+    color: #6aa6ff;
+    font-weight: normal;
+}
+
+/* Listas */
+ul {
+    list-style: none;
+    margin-bottom: 25px;
+}
+
+li {
+    padding: 10px;
+    border-bottom: 1px solid #2b2f3a;
+}
+
+/* Enlaces */
+a {
+    color: #8bbcff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Formularios */
+form {
+    margin-top: 10px;
+}
+
+select, button {
+    background-color: #1b1e25;
+    color: #d6d9df;
+    border: 1px solid #3a3f4b;
+    padding: 6px 8px;
+    margin-right: 5px;
+}
+
+select:focus,
+button:focus {
+    outline: none;
+    border-color: #6aa6ff;
+}
+
+button:hover {
+    background-color: #2a2f3a;
+    cursor: pointer;
+}
+
+/* Separadores */
+hr {
+    border: none;
+    border-top: 1px solid #2b2f3a;
+    margin: 25px 0;
+}
+
+/* Texto */
+p {
+    margin-bottom: 15px;
+    color: #c4c9d4;
+}
