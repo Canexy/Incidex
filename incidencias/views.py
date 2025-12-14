@@ -4,6 +4,7 @@ from django.contrib.auth.models import Group
 from django.views.decorators.http import require_POST
 
 from .models import Incidencia, Tecnico
+from .forms import IncidenciaForm
 
 
 @login_required
@@ -103,3 +104,23 @@ def cambiar_estado_incidencia(request, incidencia_id):
         incidencia.save()
 
     return redirect('home')
+
+@login_required
+def crear_incidencia(request):
+    user = request.user
+
+    if not user.groups.filter(name='Usuarios').exists():
+        return redirect('home')
+
+    if request.method == 'POST':
+        form = IncidenciaForm(request.POST)
+        if form.is_valid():
+            incidencia = form.save(commit=False)
+            incidencia.usuario_creador = user
+            incidencia.estado = 'nuevo'
+            incidencia.save()
+            return redirect('home')
+    else:
+        form = IncidenciaForm()
+
+    return render(request, 'incidencias/crear_incidencia.html', {'form': form})
