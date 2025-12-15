@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import Tecnico, Incidencia
 
+# Vistas de administración para los modelos.
 
 @admin.register(Tecnico)
 class TecnicoAdmin(admin.ModelAdmin):

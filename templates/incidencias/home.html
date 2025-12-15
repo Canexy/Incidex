@@ -1,91 +1,83 @@
 {% extends "base.html" %}
 
-{% block title %}Inicio | Incidex{% endblock %}
+{% block title %}
+Incidex de {{ user.username }}
+{% endblock %}
 
 {% block content %}
+    <h2>Menú de Incidencias</h2>
 
-<h2>Panel principal</h2>
+    {# Cada usuario tendrá un menú de incidencias personalizado, acorde al grupo al que pertenece. #}
 
-{% if tipo_panel == 'usuario' %}
+    {% if tipo_panel == 'usuario' %}
+    {# 'Usuario' sólo podrá ver sus incidencias. #}
+
+        <h3>Mis incidencias:</h3>
+
+        {% if incidencias %}
+            <ul>
+            {% for incidencia in incidencias %}
+                <li>
+                    <a href="{% url 'detalle_incidencia' incidencia.id %}">{{ incidencia.titulo }}</a> – {{ incidencia.estado }} ({{ incidencia.criticidad }})
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No tienes incidencias registradas.</p>
+        {% endif %}
+
     <a href="{% url 'crear_incidencia' %}">Crear nueva incidencia</a>
 
-    <h3>Mis incidencias</h3>
+    {% elif tipo_panel == 'tecnico' %}
+    {# 'Técnico' verá las incidencias disponibles sin técnico asignado (pudiendo asignarse a él mismo) y aquellas en las que está como técnico asignado. #}
 
-    {% if incidencias %}
+        <h3>Incidencias disponibles:</h3>
+
+        {% if incidencias_disponibles %}
+            <ul>
+            {% for incidencia in incidencias_disponibles %}
+                <li>
+                    <a href="{% url 'detalle_incidencia' incidencia.id %}">{{ incidencia.titulo }}</a> – {{ incidencia.criticidad }}
+                    <form method="post" action="{% url 'autoasignar_incidencia' incidencia.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit">Asignar</button>
+                    </form>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No hay incidencias disponibles.</p>
+        {% endif %}
+
+        <h3>Mis incidencias asignadas:</h3>
+
+        {% if incidencias_asignadas %}
+            <ul>
+            {% for incidencia in incidencias_asignadas %}
+                <li>
+                    <a href="{% url 'detalle_incidencia' incidencia.id %}">{{ incidencia.titulo }}</a> – Estado actual: {{ incidencia.estado }}
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No tienes incidencias asignadas.</p>
+        {% endif %}
+
+    {% elif tipo_panel == 'admin' %}
+    {# 'Administrador' verá todas las incidencias que existen. #}
+
+        <h3>Incidencias:</h3>
+
         <ul>
-        {% for inc in incidencias %}
+        {% for incidencia in incidencias %}
             <li>
-                <a href="{% url 'detalle_incidencia' inc.id %}">
-                    {{ inc.titulo }}
-                </a>
-                – {{ inc.estado }} ({{ inc.criticidad }})
+                <a href="{% url 'detalle_incidencia' incidencia.id %}">{{ incidencia.titulo }}</a> – {{ incidencia.estado }} – {{ incidencia.tipo_incidencia }}
             </li>
         {% endfor %}
         </ul>
+
     {% else %}
-        <p>No tienes incidencias registradas.</p>
+    {# Control sobre perfiles que no son válidos. #}
+        <p>No tienes un perfil válido configurado.</p>
     {% endif %}
-
-{% elif tipo_panel == 'tecnico' %}
-    <h3>Incidencias disponibles</h3>
-
-    {% if incidencias_disponibles %}
-        <ul>
-        {% for inc in incidencias_disponibles %}
-            <li>
-                <a href="{% url 'detalle_incidencia' inc.id %}">
-                    {{ inc.titulo }}
-                </a>
-                – {{ inc.criticidad }}
-
-                <form method="post"
-                      action="{% url 'autoasignar_incidencia' inc.id %}"
-                      style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit">Asignarme</button>
-                </form>
-            </li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>No hay incidencias disponibles.</p>
-    {% endif %}
-
-    <h3>Mis incidencias asignadas</h3>
-
-    {% if incidencias_asignadas %}
-        <ul>
-        {% for inc in incidencias_asignadas %}
-            <li>
-                <strong>
-                    <a href="{% url 'detalle_incidencia' inc.id %}">
-                        {{ inc.titulo }}
-                    </a>
-                </strong>
-                – Estado actual: {{ inc.estado }}
-            </li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>No tienes incidencias asignadas.</p>
-    {% endif %}
-
-{% elif tipo_panel == 'admin' %}
-    <h3>Todas las incidencias</h3>
-
-    <ul>
-    {% for inc in incidencias %}
-        <li>
-            <a href="{% url 'detalle_incidencia' inc.id %}">
-                {{ inc.titulo }}
-            </a>
-            – {{ inc.estado }} – {{ inc.tipo_incidencia }}
-        </li>
-    {% endfor %}
-    </ul>
-
-{% else %}
-    <p>No tienes un perfil válido configurado.</p>
-{% endif %}
-
 {% endblock %}

@@ -1,3 +1,6 @@
+
+/* Mockup de estilos provisional. */
+
 /* Reset mínimo */
 * {
     box-sizing: border-box;
@@ -8,8 +11,8 @@
 /* Base */
 body {
     font-family: Consolas, Monaco, "Courier New", monospace;
-    background-color: #14161b;       /* más claro que antes */
-    color: #d6d9df;                  /* menos blanco puro */
+    background-color: #14161b;
+    color: #d6d9df;
     line-height: 1.6;
 }
 
@@ -26,7 +29,7 @@ body {
 .logo {
     font-size: 1.2rem;
     font-weight: bold;
-    color: #6aa6ff;                  /* azul más suave */
+    color: #6aa6ff;
 }
 
 .user-info {
@@ -117,3 +120,5 @@ p {
     margin-bottom: 15px;
     color: #c4c9d4;
 }
+
+/* Aún hay cosas que debo cambiar. No es una versión final. */

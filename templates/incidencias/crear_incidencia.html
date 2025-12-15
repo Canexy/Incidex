@@ -1,14 +1,15 @@
 {% extends "base.html" %}
 
-{% block title %}Nueva incidencia | Incidex{% endblock %}
+{% block title %}
+Nueva incidencia
+{% endblock %}
 
 {% block content %}
-<h2>Crear nueva incidencia</h2>
+    <h2>Crear nueva incidencia:</h2>
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Crear incidencia</button>
-</form>
-
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Crear</button>
+    </form>
 {% endblock %}

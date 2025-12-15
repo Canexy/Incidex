@@ -1,85 +1,87 @@
 {% extends "base.html" %}
 
-{% block title %}Incidencia {{ incidencia.id }} | Incidex{% endblock %}
+{% block title %}
+Incidencia {{ incidencia.id }}
+{% endblock %}
 
 {% block content %}
+    {# Detalles sobre la incidencia en cuestión. Visible para todos. #}
 
-<h2>{{ incidencia.titulo }}</h2>
+    <h2>{{ incidencia.titulo }}</h2>
 
-<p><strong>Descripción:</strong></p>
-<p>{{ incidencia.descripcion }}</p>
-
-<ul>
-    <li><strong>Estado:</strong> {{ incidencia.estado }}</li>
-    <li><strong>Criticidad:</strong> {{ incidencia.criticidad }}</li>
-    <li><strong>Tipo:</strong> {{ incidencia.tipo_incidencia }}</li>
-    <li><strong>Fecha de creación:</strong> {{ incidencia.fecha_creacion }}</li>
-    <li><strong>Usuario creador:</strong> {{ incidencia.usuario_creador.username }}</li>
-    <li>
-        <strong>Técnico asignado:</strong>
-        {% if incidencia.tecnico_asignado %}
-            {{ incidencia.tecnico_asignado.usuario.username }}
-        {% else %}
-            Sin asignar
-        {% endif %}
-    </li>
-</ul>
-
-<hr>
-
-{# === ACCIONES DEL TÉCNICO === #}
-
-{% if es_tecnico %}
-
-    {% if puede_autoasignar %}
-        <form method="post"
-              action="{% url 'autoasignar_incidencia' incidencia.id %}">
-            {% csrf_token %}
-            <button type="submit">Asignarme esta incidencia</button>
-        </form>
-    {% endif %}
-
-    {% if es_tecnico_asignado %}
-        <h3>Cambiar estado</h3>
-
-        <form method="post"
-              action="{% url 'cambiar_estado_incidencia' incidencia.id %}">
-            {% csrf_token %}
-            <select name="estado">
-                <option value="">-- Seleccionar estado --</option>
-                <option value="pendiente">Pendiente</option>
-                <option value="en_espera">En espera</option>
-                <option value="resuelto">Resuelto</option>
-                <option value="cerrado">Cerrado</option>
-            </select>
-            <button type="submit">Actualizar estado</button>
-        </form>
-    {% endif %}
-
-{% endif %}
-
-<hr>
-
-<h3>Historial de estados</h3>
-
-{% if historial %}
+    <p><strong>Descripción:</strong> {{ incidencia.descripcion }}</p>
     <ul>
-    {% for h in historial %}
+        <li><strong>Estado:</strong> {{ incidencia.estado }}</li>
+        <!-- <li><strong>Estado:</strong> {{ incidencia.get_estado_display }}</li> -->
+        <li><strong>Nivel:</strong> {{ incidencia.criticidad }}</li>
+        <li><strong>Tipo:</strong> {{ incidencia.tipo_incidencia }}</li>
+        <li><strong>Fecha de creación:</strong> {{ incidencia.fecha_creacion }}</li>
+        <li><strong>Usuario creador:</strong> {{ incidencia.usuario_creador.username }}</li>
         <li>
-            {{ h.fecha_cambio|date:"d/m/Y H:i" }} –
-            {{ h.estado_anterior }} → {{ h.estado_nuevo }}
-            {% if h.cambiado_por %}
-                ({{ h.cambiado_por.username }})
+            <strong>Técnico asignado:</strong>
+            {% if incidencia.tecnico_asignado %}
+                {{ incidencia.tecnico_asignado.usuario.username }}
+            {% else %}
+                Sin asignar
             {% endif %}
         </li>
-    {% endfor %}
     </ul>
-{% else %}
-    <p>No hay cambios de estado registrados.</p>
-{% endif %}
 
-<hr>
+    <hr>
 
-<a href="{% url 'home' %}">Volver al panel</a>
+    {# Acción íntegra de 'Técnico'. No visible para el resto de grupos. #}
 
+    {% if es_tecnico %}
+        {# Lógica por probar aún. #}
+        {# #}
+        {% if puede_autoasignar %}
+            <form method="post"
+                action="{% url 'autoasignar_incidencia' incidencia.id %}">
+                {% csrf_token %}
+                <button type="submit">Asignarme esta incidencia</button>
+            </form>
+        {% endif %}
+        {# #}
+
+        {% if es_tecnico_asignado %}
+            <h3>Cambiar estado:</h3>
+
+            <form method="post"
+                action="{% url 'cambiar_estado_incidencia' incidencia.id %}">
+                {% csrf_token %}
+                <select name="estado">
+                    <option value="">- Seleccionar estado -</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="en_espera">En espera</option>
+                    <option value="resuelto">Resuelto</option>
+                    <option value="cerrado">Cerrado</option>
+                </select>
+                <button type="submit">Actualizar</button>
+            </form>
+        {% endif %}
+    {% endif %}
+
+    <hr>
+
+    {# Añade un historial de cambios de estado de la incidencia. #}
+
+    <h3>Historial de estados:</h3>
+
+    {% if historial %}
+        <ul>
+        {% for cambio in historial %}
+            <li>
+                {{ cambio.fecha_cambio|date:"d/m/Y H:i" }} –
+                {{ cambio.estado_anterior }} → {{ cambio.estado_nuevo }}
+                {% if cambio.cambiado_por %}
+                    ({{ cambio.cambiado_por.username }})
+                {% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No hay cambios de estado registrados.</p>
+    {% endif %}
+
+    <a href="{% url 'home' %}">Volver</a>
 {% endblock %}

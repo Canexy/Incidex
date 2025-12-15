@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %}Login | Incidex{% endblock %}
+{% block title %}
+Iniciar sesión en Incidex
+{% endblock %}
 
 {% block content %}
-    <h2>Iniciar sesión</h2>
+    <h2>Iniciar sesión:</h2>
 
     {% if form.errors %}
         <p style="color: red;">Usuario o contraseña incorrectos.</p>
