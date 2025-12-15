@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load incidencias_extras %}
 
 {% block title %}
 Incidencia {{ incidencia.id }}
@@ -11,10 +12,9 @@ Incidencia {{ incidencia.id }}
 
     <p><strong>Descripción:</strong> {{ incidencia.descripcion }}</p>
     <ul>
-        <li><strong>Estado:</strong> {{ incidencia.estado }}</li>
-        <!-- <li><strong>Estado:</strong> {{ incidencia.get_estado_display }}</li> -->
-        <li><strong>Nivel:</strong> {{ incidencia.criticidad }}</li>
-        <li><strong>Tipo:</strong> {{ incidencia.tipo_incidencia }}</li>
+        <li><strong>Estado:</strong> {{ incidencia.get_estado_display }}</li>
+        <li><strong>Nivel:</strong> {{ incidencia.get_criticidad_display }}</li>
+        <li><strong>Tipo:</strong> {{ incidencia.get_tipo_incidencia_display }}</li>
         <li><strong>Fecha de creación:</strong> {{ incidencia.fecha_creacion }}</li>
         <li><strong>Usuario creador:</strong> {{ incidencia.usuario_creador.username }}</li>
         <li>
@@ -72,7 +72,8 @@ Incidencia {{ incidencia.id }}
         {% for cambio in historial %}
             <li>
                 {{ cambio.fecha_cambio|date:"d/m/Y H:i" }} –
-                {{ cambio.estado_anterior }} → {{ cambio.estado_nuevo }}
+                <!-- {{ cambio.estado_anterior }} → {{ cambio.estado_nuevo }} -->
+                {{ cambio.estado_anterior|humanize_estado }} → {{ cambio.estado_nuevo|humanize_estado }}
                 {% if cambio.cambiado_por %}
                     ({{ cambio.cambiado_por.username }})
                 {% endif %}

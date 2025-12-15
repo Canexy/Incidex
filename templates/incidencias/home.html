@@ -18,7 +18,8 @@ Incidex de {{ user.username }}
             <ul>
             {% for incidencia in incidencias %}
                 <li>
-                    <a href="{% url 'detalle_incidencia' incidencia.id %}">{{ incidencia.titulo }}</a> – {{ incidencia.estado }} ({{ incidencia.criticidad }})
+                    <a href="{% url 'detalle_incidencia' incidencia.id %}">{{ incidencia.titulo }}</a> – {{ incidencia.get_estado_display }} ({{ incidencia.get_criticidad_display }})
+                    <!-- Uso .get_x_display para humanizar el texto. -->
                 </li>
             {% endfor %}
             </ul>
@@ -37,7 +38,7 @@ Incidex de {{ user.username }}
             <ul>
             {% for incidencia in incidencias_disponibles %}
                 <li>
-                    <a href="{% url 'detalle_incidencia' incidencia.id %}">{{ incidencia.titulo }}</a> – {{ incidencia.criticidad }}
+                    <a href="{% url 'detalle_incidencia' incidencia.id %}">{{ incidencia.titulo }}</a> – {{ incidencia.get_criticidad_display }}
                     <form method="post" action="{% url 'autoasignar_incidencia' incidencia.id %}" style="display:inline;">
                         {% csrf_token %}
                         <button type="submit">Asignar</button>
@@ -55,7 +56,7 @@ Incidex de {{ user.username }}
             <ul>
             {% for incidencia in incidencias_asignadas %}
                 <li>
-                    <a href="{% url 'detalle_incidencia' incidencia.id %}">{{ incidencia.titulo }}</a> – Estado actual: {{ incidencia.estado }}
+                    <a href="{% url 'detalle_incidencia' incidencia.id %}">{{ incidencia.titulo }}</a> – Estado actual: {{ incidencia.get_estado_display }}
                 </li>
             {% endfor %}
             </ul>
@@ -71,7 +72,7 @@ Incidex de {{ user.username }}
         <ul>
         {% for incidencia in incidencias %}
             <li>
-                <a href="{% url 'detalle_incidencia' incidencia.id %}">{{ incidencia.titulo }}</a> – {{ incidencia.estado }} – {{ incidencia.tipo_incidencia }}
+                <a href="{% url 'detalle_incidencia' incidencia.id %}">{{ incidencia.titulo }}</a> – {{ incidencia.get_estado_display }} – {{ incidencia.get_tipo_incidencia_display }}
             </li>
         {% endfor %}
         </ul>
