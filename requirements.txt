@@ -1,7 +1,11 @@
 asgiref==3.11.0
+cffi==2.0.0
+cryptography==46.0.3
 Django==5.2.9
 django-extensions==4.1
+pycparser==2.23
 pydotplus==2.0.2
+PyMySQL==1.1.2
 pyparsing==3.2.5
 sqlparse==0.5.4
 typing_extensions==4.15.0
