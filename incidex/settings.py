@@ -4,8 +4,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-z)&94-cc4v9@3t0bd2lhc^s0yu687)!u(k%s0#0j#elz*7kos*'
 DEBUG = True
 
-ALLOWED_HOSTS = []
-# ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+# Comando a ejecutar para que se vean en otros nodos:
+# python manage.py runserver 0.0.0.0:8000
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -66,7 +68,8 @@ DATABASES = {
         'HOST': '10.1.2.200',
         'PORT': '3306',
         'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION'",
+            'charset': 'utf8mb4',
         }
     }
 }
