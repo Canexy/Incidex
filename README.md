@@ -9,6 +9,8 @@
     Aplicación web en Django para la gestión de incidencias en entornos técnicos.
 </h1>
 
+> ¡README desactualizado!
+
 Permite registrar, asignar y seguir incidencias mediante un flujo de estados controlado, con historial auditable y acceso por roles (usuarios, técnicos y administradores), priorizando la trazabilidad y la claridad operativa.
 
 ## Configuración y ejecución (contemplada en Linux)

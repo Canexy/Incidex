@@ -62,7 +62,6 @@ DATABASES = {
 '''
 
 # Conexión con MySQL.
-'''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -78,9 +77,9 @@ DATABASES = {
         }
     }
 }
-'''
 
 # Conexión con PostgreSQL.
+'''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -92,6 +91,7 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+'''
 
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
