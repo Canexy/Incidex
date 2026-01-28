@@ -69,8 +69,10 @@ DATABASES = {
         'NAME': 'incidex',
         'USER': 'mario',
         'PASSWORD': '1996',
-        'HOST': '100.124.132.7',
-        # 'HOST': '10.1.2.200',
+        # Tailscale usage:
+        # 'HOST': '100.124.132.7',
+        # Indoor usage:
+        'HOST': '10.0.0.101',
         'PORT': '3306',
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION'",
@@ -95,6 +97,7 @@ DATABASES = {
 '''
 
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
+'''
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -109,10 +112,10 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+'''
 
-'''
+# Validación de contraseñas desactivada temporalmente.
 AUTH_PASSWORD_VALIDATORS = []
-'''
 
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 LANGUAGE_CODE = 'es-es'
@@ -130,3 +133,5 @@ STATICFILES_DIRS = [
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/accounts/login/'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

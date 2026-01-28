@@ -6,7 +6,7 @@ Incidex de {{ user.username }}
 
 {% block content %}
     <h2>Menú de Incidencias</h2>
-
+    {# ---------------------------------------------------------------------------------------------------------------------- #}
     {% if tipo_panel == 'usuario' %}
 
         <h3>Mis incidencias activas:</h3>
@@ -18,7 +18,10 @@ Incidex de {{ user.username }}
                     <a href="{% url 'detalle_incidencia' incidencia.id %}">
                         {{ incidencia.titulo }}
                     </a>
-                    – {{ incidencia.get_estado_display }} ({{ incidencia.get_criticidad_display }})
+                    <div class="badges">
+                        <span class="badge estado {{ incidencia.estado }}">{{ incidencia.get_estado_display }}</span>
+                        <span class="badge medio">{{ incidencia.get_criticidad_display }}</span>
+                    </div>
                 </li>
             {% endfor %}
             </ul>
@@ -35,7 +38,9 @@ Incidex de {{ user.username }}
                     <a href="{% url 'detalle_incidencia' incidencia.id %}">
                         {{ incidencia.titulo }}
                     </a>
-                    – Cerrada
+                    <div class="badges">
+                        <span class="badge cerrado">Cerrada</span>
+                    </div>
                 </li>
             {% endfor %}
             </ul>
@@ -43,8 +48,9 @@ Incidex de {{ user.username }}
             <p>No tienes incidencias cerradas.</p>
         {% endif %}
 
-        <a href="{% url 'crear_incidencia' %}">Crear nueva incidencia</a>
+        <a href="{% url 'crear_incidencia' %}" class="action-link">Crear nueva incidencia</a>
 
+    {# ---------------------------------------------------------------------------------------------------------------------- #}
     {% elif tipo_panel == 'tecnico' %}
 
         <h3>Incidencias disponibles:</h3>
@@ -56,13 +62,14 @@ Incidex de {{ user.username }}
                     <a href="{% url 'detalle_incidencia' incidencia.id %}">
                         {{ incidencia.titulo }}
                     </a>
-                    – {{ incidencia.get_criticidad_display }}
-                    <form method="post"
-                          action="{% url 'autoasignar_incidencia' incidencia.id %}"
-                          style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit">Asignar</button>
-                    </form>
+                    <div class="badges">
+                        <span class="badge medio">{{ incidencia.get_criticidad_display }}</span>
+                        <form method="post"
+                              action="{% url 'autoasignar_incidencia' incidencia.id %}">
+                            {% csrf_token %}
+                            <button type="submit">Asignar</button>
+                        </form>
+                    </div>
                 </li>
             {% endfor %}
             </ul>
@@ -79,7 +86,9 @@ Incidex de {{ user.username }}
                     <a href="{% url 'detalle_incidencia' incidencia.id %}">
                         {{ incidencia.titulo }}
                     </a>
-                    – Estado actual: {{ incidencia.get_estado_display }}
+                    <div class="badges">
+                        <span class="badge estado {{ incidencia.estado }}">{{ incidencia.get_estado_display }}</span>
+                    </div>
                 </li>
             {% endfor %}
             </ul>
@@ -96,7 +105,9 @@ Incidex de {{ user.username }}
                     <a href="{% url 'detalle_incidencia' incidencia.id %}">
                         {{ incidencia.titulo }}
                     </a>
-                    – Cerrada
+                    <div class="badges">
+                        <span class="badge cerrado">Cerrada</span>
+                    </div>
                 </li>
             {% endfor %}
             </ul>
@@ -104,6 +115,7 @@ Incidex de {{ user.username }}
             <p>No tienes incidencias cerradas.</p>
         {% endif %}
 
+    {# ---------------------------------------------------------------------------------------------------------------------- #}
     {% elif tipo_panel == 'admin' %}
 
         <h3>Incidencias activas:</h3>
@@ -115,8 +127,10 @@ Incidex de {{ user.username }}
                     <a href="{% url 'detalle_incidencia' incidencia.id %}">
                         {{ incidencia.titulo }}
                     </a>
-                    – {{ incidencia.get_estado_display }}
-                    – {{ incidencia.get_tipo_incidencia_display }}
+                    <div class="badges">
+                        <span class="badge estado {{ incidencia.estado }}">{{ incidencia.get_estado_display }}</span>
+                        <span class="badge tipo">{{ incidencia.get_tipo_incidencia_display }}</span>
+                    </div>
                 </li>
             {% endfor %}
             </ul>
@@ -133,7 +147,9 @@ Incidex de {{ user.username }}
                     <a href="{% url 'detalle_incidencia' incidencia.id %}">
                         {{ incidencia.titulo }}
                     </a>
-                    – Cerrada
+                    <div class="badges">
+                        <span class="badge cerrado">Cerrada</span>
+                    </div>
                 </li>
             {% endfor %}
             </ul>
@@ -141,6 +157,7 @@ Incidex de {{ user.username }}
             <p>No hay incidencias cerradas.</p>
         {% endif %}
 
+    {# ---------------------------------------------------------------------------------------------------------------------- #}
     {% else %}
 
         <p>No tienes un perfil válido configurado.</p>

@@ -16,7 +16,7 @@
         </div>
         <div class="topbar-right">
             {% if user.is_authenticated %}
-                <span class="user-info">{{ user.username }}</span>
+                <span class="user-info">¡Hola, {{ user.username }}!</span>
                 <form method="post" action="{% url 'logout' %}" class="logout-form">
                     {% csrf_token %}
                     <button type="submit">Salir</button>
