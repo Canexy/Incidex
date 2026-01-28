@@ -2,7 +2,7 @@
 {% load incidencias_extras %}
 
 {% block title %}
-Incidencia {{ incidencia.id }}
+Incidencia de {{ incidencia.usuario_creador.username }}
 {% endblock %}
 
 {% block content %}
@@ -10,7 +10,9 @@ Incidencia {{ incidencia.id }}
 
     <h2>{{ incidencia.titulo }}</h2>
 
-    <p><strong>Descripción:</strong> {{ incidencia.descripcion }}</p>
+    <p class="detalle-descripcion">
+        <strong>Descripción:</strong> {{ incidencia.descripcion }}
+    </p>
     <ul>
         <li><strong>Estado:</strong> {{ incidencia.get_estado_display }}</li>
         <li><strong>Nivel:</strong> {{ incidencia.get_criticidad_display }}</li>
@@ -66,17 +68,24 @@ Incidencia {{ incidencia.id }}
 
     {# Añade un historial de cambios de estado de la incidencia. #}
 
+    {# Historial de cambios de estado de la incidencia #}
+
     <h3>Historial de estados:</h3>
 
     {% if historial %}
-        <ul>
+        <ul class="historial-estados">
         {% for cambio in historial %}
             <li>
-                {{ cambio.fecha_cambio|date:"d/m/Y H:i" }} –
-                <!-- {{ cambio.estado_anterior }} → {{ cambio.estado_nuevo }} -->
-                {{ cambio.estado_anterior|humanize_estado }} → {{ cambio.estado_nuevo|humanize_estado }}
+                De 
+                <span class="badge estado {{ cambio.estado_anterior }}">
+                    {{ cambio.estado_anterior|humanize_estado }}
+                </span>
+                a
+                <span class="badge estado {{ cambio.estado_nuevo }}">
+                    {{ cambio.estado_nuevo|humanize_estado }}
+                </span>
                 {% if cambio.cambiado_por %}
-                    ({{ cambio.cambiado_por.username }})
+                    por {{ cambio.cambiado_por.username }}, el {{ cambio.fecha_cambio }}.
                 {% endif %}
             </li>
         {% endfor %}

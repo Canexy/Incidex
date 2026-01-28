@@ -12,7 +12,9 @@
 <body>
     <header class="topbar">
         <div class="topbar-left">
-            <span class="logo">Incidex</span>
+            <span class="logo">
+                <img src="{% static 'img/logo.svg' %}" alt="Incidex">
+            </span>
         </div>
         <div class="topbar-right">
             {% if user.is_authenticated %}

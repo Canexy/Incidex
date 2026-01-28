@@ -1,9 +1,7 @@
 
-<!--
 <p align="center" style="margin-bottom: 0;">
-  <img src="/media/olimpiApp_a.svg" alt="Logo" width="50%" style="vertical-align: middle;">
+  <img src="/static/img/logo.svg" alt="Logo" width="50%" style="vertical-align: middle;">
 </p>
--->
 
 <h1 align="center">
     Aplicación web en Django para la gestión de incidencias en entornos técnicos.
@@ -11,7 +9,7 @@
 
 > ¡README desactualizado!
 
-Permite registrar, asignar y seguir incidencias mediante un flujo de estados controlado, con historial auditable y acceso por roles (usuarios, técnicos y administradores), priorizando la trazabilidad y la claridad operativa.
+Permite registrar, asignar y seguir incidencias mediante un flujo de estados controlado, con historial auditable y acceso por roles (Usuarios, Técnicos y Administradores), priorizando la trazabilidad y la claridad operativa.
 
 ## Configuración y ejecución (contemplada en Linux)
 ### Instalación de Python y Pip (Debian)
@@ -79,6 +77,26 @@ pip install -r requirements.txt
 
 ---
 
+## Cambios sobre su ejecución final
+### Configuración actual
+La aplicación tal y como está, no va a funcionar. Dentro del archivo `incidex/settings.py` se debe cambiar la base de datos con la que va a funcionar, entre otros. 
+
+La aplicación está preparada para usarse con SQLite, MySQL y PostgreSQL. 
+
+Por defecto, usa MySQL con credenciales para su desarrollo (credenciales de ejemplo). Se debe comentar u eliminar dichas líneas y, si se quiere usar localmente, descomentar las líneas relacionadas con SQLite.
+
+Además, por defecto, tiene desactivadas las políticas de validación de contraseñas. Se puede revertir descomentando las líneas anteriores.
+
+Antes de la ejecución, debemos crear un usuario Administrador para la aplicación.
+
+```console
+python3 manage.py createsuperuser
+```
+
+Siguiendo las instrucciones, usaremos dicho usuario para poder acceder más adelante.
+
+---
+
 ## Ejecución del servidor de la aplicación
 ### Acceso a la aplicación
 Asegurándonos que el entorno virtual está activado y todas las dependencias están instaladas debidamente, ejecutamos el comando desde raíz del proyecto.
@@ -89,13 +107,5 @@ python3 manage.py runserver
 
 Si todo va bien, aparecerá un enlace. Copiando dicha dirección en un navegador, o haciendo 'Ctrl + Click' sobre el enlace que se muestra en consola, mostrará la página de Login.
 
-Es posible hacer login como `admin`, con contraseña `hcW8PHjWTTMPuq2`. 
+Es posible hacer login con las credenciales que hemos estipulado anteriormente. 
 Desde `http://127.0.0.1:8080/admin/` con las mismas credenciales, podremos crear usuarios normales y técnicos para el uso de la aplicación.
-
-Los siguientes usuarios están registrados y pueden usarse actualmente:
-
-Usuarios normales:
-`Álvaro` - `zCEzzDqhDYfR6r7`
-
-Técnicos:
-`Mario` - `PAZmuvF5wiHwk92`

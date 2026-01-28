@@ -56,10 +56,6 @@ class CustomUserAdmin(UserAdmin):
     )
 
     def get_inlines(self, request, obj):
-        """
-        El inline SOLO aparece si el usuario YA ES técnico en BD.
-        Nunca depende del formulario actual.
-        """
         if not obj:
             return []
 
