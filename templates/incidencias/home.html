@@ -7,30 +7,45 @@ Incidex de {{ user.username }}
 {% block content %}
     <h2>Menú de Incidencias</h2>
 
-    {# Cada usuario tendrá un menú de incidencias personalizado, acorde al grupo al que pertenece. #}
-
     {% if tipo_panel == 'usuario' %}
-    {# 'Usuario' sólo podrá ver sus incidencias. #}
 
-        <h3>Mis incidencias:</h3>
+        <h3>Mis incidencias activas:</h3>
 
         {% if incidencias %}
             <ul>
             {% for incidencia in incidencias %}
                 <li>
-                    <a href="{% url 'detalle_incidencia' incidencia.id %}">{{ incidencia.titulo }}</a> – {{ incidencia.get_estado_display }} ({{ incidencia.get_criticidad_display }})
-                    <!-- Uso .get_x_display para humanizar el texto. -->
+                    <a href="{% url 'detalle_incidencia' incidencia.id %}">
+                        {{ incidencia.titulo }}
+                    </a>
+                    – {{ incidencia.get_estado_display }} ({{ incidencia.get_criticidad_display }})
                 </li>
             {% endfor %}
             </ul>
         {% else %}
-            <p>No tienes incidencias registradas.</p>
+            <p>No tienes incidencias activas.</p>
         {% endif %}
 
-    <a href="{% url 'crear_incidencia' %}">Crear nueva incidencia</a>
+        <h3>Historial de incidencias cerradas:</h3>
+
+        {% if incidencias_cerradas %}
+            <ul>
+            {% for incidencia in incidencias_cerradas %}
+                <li>
+                    <a href="{% url 'detalle_incidencia' incidencia.id %}">
+                        {{ incidencia.titulo }}
+                    </a>
+                    – Cerrada
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No tienes incidencias cerradas.</p>
+        {% endif %}
+
+        <a href="{% url 'crear_incidencia' %}">Crear nueva incidencia</a>
 
     {% elif tipo_panel == 'tecnico' %}
-    {# 'Técnico' verá las incidencias disponibles sin técnico asignado (pudiendo asignarse a él mismo) y aquellas en las que está como técnico asignado. #}
 
         <h3>Incidencias disponibles:</h3>
 
@@ -38,8 +53,13 @@ Incidex de {{ user.username }}
             <ul>
             {% for incidencia in incidencias_disponibles %}
                 <li>
-                    <a href="{% url 'detalle_incidencia' incidencia.id %}">{{ incidencia.titulo }}</a> – {{ incidencia.get_criticidad_display }}
-                    <form method="post" action="{% url 'autoasignar_incidencia' incidencia.id %}" style="display:inline;">
+                    <a href="{% url 'detalle_incidencia' incidencia.id %}">
+                        {{ incidencia.titulo }}
+                    </a>
+                    – {{ incidencia.get_criticidad_display }}
+                    <form method="post"
+                          action="{% url 'autoasignar_incidencia' incidencia.id %}"
+                          style="display:inline;">
                         {% csrf_token %}
                         <button type="submit">Asignar</button>
                     </form>
@@ -56,29 +76,74 @@ Incidex de {{ user.username }}
             <ul>
             {% for incidencia in incidencias_asignadas %}
                 <li>
-                    <a href="{% url 'detalle_incidencia' incidencia.id %}">{{ incidencia.titulo }}</a> – Estado actual: {{ incidencia.get_estado_display }}
+                    <a href="{% url 'detalle_incidencia' incidencia.id %}">
+                        {{ incidencia.titulo }}
+                    </a>
+                    – Estado actual: {{ incidencia.get_estado_display }}
                 </li>
             {% endfor %}
             </ul>
         {% else %}
-            <p>No tienes incidencias asignadas.</p>
+            <p>No tienes incidencias asignadas activas.</p>
+        {% endif %}
+
+        <h3>Historial de incidencias cerradas:</h3>
+
+        {% if incidencias_cerradas %}
+            <ul>
+            {% for incidencia in incidencias_cerradas %}
+                <li>
+                    <a href="{% url 'detalle_incidencia' incidencia.id %}">
+                        {{ incidencia.titulo }}
+                    </a>
+                    – Cerrada
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No tienes incidencias cerradas.</p>
         {% endif %}
 
     {% elif tipo_panel == 'admin' %}
-    {# 'Administrador' verá todas las incidencias que existen. #}
 
-        <h3>Incidencias:</h3>
+        <h3>Incidencias activas:</h3>
 
-        <ul>
-        {% for incidencia in incidencias %}
-            <li>
-                <a href="{% url 'detalle_incidencia' incidencia.id %}">{{ incidencia.titulo }}</a> – {{ incidencia.get_estado_display }} – {{ incidencia.get_tipo_incidencia_display }}
-            </li>
-        {% endfor %}
-        </ul>
+        {% if incidencias %}
+            <ul>
+            {% for incidencia in incidencias %}
+                <li>
+                    <a href="{% url 'detalle_incidencia' incidencia.id %}">
+                        {{ incidencia.titulo }}
+                    </a>
+                    – {{ incidencia.get_estado_display }}
+                    – {{ incidencia.get_tipo_incidencia_display }}
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No hay incidencias activas.</p>
+        {% endif %}
+
+        <h3>Historial global de incidencias cerradas:</h3>
+
+        {% if incidencias_cerradas %}
+            <ul>
+            {% for incidencia in incidencias_cerradas %}
+                <li>
+                    <a href="{% url 'detalle_incidencia' incidencia.id %}">
+                        {{ incidencia.titulo }}
+                    </a>
+                    – Cerrada
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No hay incidencias cerradas.</p>
+        {% endif %}
 
     {% else %}
-    {# Control sobre perfiles que no son válidos. #}
+
         <p>No tienes un perfil válido configurado.</p>
+
     {% endif %}
 {% endblock %}
